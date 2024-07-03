@@ -1,5 +1,6 @@
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
+import { addToCart } from "../data/cart.js";
 
 function loadHomePage() {
 	let productHTML = '';
@@ -29,7 +30,7 @@ function loadHomePage() {
 				</div>
 
 				<div class="product-quantity-container">
-					<select>
+					<select class="js-quantity-selector-${product.id}">
 						<option selected value="1">1</option>
 						<option value="2">2</option>
 						<option value="3">3</option>
@@ -45,12 +46,13 @@ function loadHomePage() {
 
 				<div class="product-spacer"></div>
 
-				<div class="added-to-cart">
+				<div class="added-to-cart js-added-to-cart-${product.id}">
 					<img src="images/icons/checkmark.png">
 					Added
 				</div>
 
-				<button class="add-to-cart-button button-primary">
+				<button class="add-to-cart-button button-primary js-add-to-cart" 
+					data-product-id="${product.id}">
 					Add to Cart
 				</button>
 			</div>
@@ -58,5 +60,22 @@ function loadHomePage() {
 	});
 
 	document.querySelector('.js-products-grid').innerHTML = productHTML;
+
+	document.querySelectorAll('.js-add-to-cart').forEach((button) => {
+		button.addEventListener('click', () => {
+			const {productId} = button.dataset;
+			const added = document.querySelector(`.js-added-to-cart-${productId}`);
+			let timeOutId;
+
+			addToCart(productId);
+			added.classList.add('added-image');
+
+			clearTimeout(timeOutId);
+			
+			timeOutId = setTimeout(() => {
+				added.classList.remove('added-image');
+			}, 2000);
+		})
+	});
 }
 loadHomePage();
