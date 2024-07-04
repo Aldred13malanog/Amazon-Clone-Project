@@ -1,3 +1,5 @@
-import { loadCheckoutPage } from "./checkout/orderSummary.js";
+import { loadOrderSummary } from "./checkout/orderSummary.js";
+import { loadPaymentSummary } from "./checkout/paymentSummary.js";
 
-loadCheckoutPage();
+loadOrderSummary();
+loadPaymentSummary();

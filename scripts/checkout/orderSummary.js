@@ -3,8 +3,9 @@ import {products ,getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { deliveryOptions, calculateDeliveryDays, getDeliveryOption } from "../../data/deliveryOptions.js";
+import { loadPaymentSummary } from "./paymentSummary.js";
 
-export function loadCheckoutPage() {
+export function loadOrderSummary() {
 	let orderSummaryHTML = '';	
 
 	cart.forEach((cartItem) => {
@@ -110,7 +111,8 @@ export function loadCheckoutPage() {
 		button.addEventListener('click', () => {
 			const {productId} = button.dataset;
 			removeFromCart(productId);
-			loadCheckoutPage();
+			loadOrderSummary();
+			loadPaymentSummary();
 		})
 	});
 
@@ -139,7 +141,8 @@ export function loadCheckoutPage() {
 
 			quantityLabel.innerHTML = newQuantity;
 			updateQuantity(productId, newQuantity);
-			loadCheckoutPage();
+			loadOrderSummary();
+			loadPaymentSummary();
 		})
 	});
 
@@ -148,7 +151,8 @@ export function loadCheckoutPage() {
 		element.addEventListener('click', () => {
 			const {productId, deliveryId} = element.dataset;
 			updateDeliveryOptions(productId, deliveryId);
-			loadCheckoutPage();
+			loadOrderSummary();
+			loadPaymentSummary();
 		});
 	});
 }
