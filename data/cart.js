@@ -56,3 +56,15 @@ export function updateCartQuantity() {
 
 	return cartQuantity;
 }
+
+export function updateQuantity(productId, newQuantity) {
+	let matchingItem;
+
+	cart.forEach((item) => {
+		if (item.productId === productId) {
+			matchingItem = item;
+		}
+	});
+	matchingItem.quantity = newQuantity;
+	saveToLocalStorage();
+}
