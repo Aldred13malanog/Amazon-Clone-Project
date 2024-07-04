@@ -10,6 +10,7 @@ export function addToCart(productId) {
 	let matchingItem;
 
 	const selectValue = document.querySelector(`.js-quantity-selector-${productId}`).value;
+	const selectNumber = Number(selectValue);
 
 	cart.forEach((cartItem) => {
 		if (productId === cartItem.productId) {
@@ -18,11 +19,11 @@ export function addToCart(productId) {
 	});
 
 	if (matchingItem) {
-		matchingItem.quantity += 1;
+		matchingItem.quantity += selectNumber;
 	} else {
 		cart.push({
 			productId,
-			quantity: Number(selectValue)
+			quantity: selectNumber
 		});
 	}
 
@@ -44,4 +45,14 @@ export function removeFromCart(productId) {
 
 	cart = newCart;
 	saveToLocalStorage();
+}
+
+export function updateCartQuantity() {
+	let cartQuantity = 0;
+
+	cart.forEach((cartItem) => {
+		cartQuantity += cartItem.quantity;
+	});
+
+	return cartQuantity;
 }

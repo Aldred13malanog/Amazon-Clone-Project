@@ -1,6 +1,6 @@
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
-import { addToCart } from "../data/cart.js";
+import { addToCart, cart, updateCartQuantity } from "../data/cart.js";
 
 function loadHomePage() {
 	let productHTML = '';
@@ -59,6 +59,12 @@ function loadHomePage() {
 		`;
 	});
 
+	displayQuantity();
+	function displayQuantity() {
+		const cartQuantity = updateCartQuantity();	
+		document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+	}	
+
 	document.querySelector('.js-products-grid').innerHTML = productHTML;
 
 	document.querySelectorAll('.js-add-to-cart').forEach((button) => {
@@ -75,6 +81,8 @@ function loadHomePage() {
 			timeOutId = setTimeout(() => {
 				added.classList.remove('added-image');
 			}, 2000);
+
+			displayQuantity();
 		})
 	});
 }
