@@ -1,5 +1,5 @@
 import { products } from "../data/products.js";
-import { addToCart, updateCartQuantity } from "../data/cart.js";
+import { cart } from "../data/cart.js";
 
 function loadHomePage() {
 	let productHTML = '';
@@ -62,7 +62,7 @@ function loadHomePage() {
 
 	displayQuantity();
 	function displayQuantity() {
-		const cartQuantity = updateCartQuantity();	
+		const cartQuantity = cart.updateCartQuantity();
 		document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
 	}	
 
@@ -74,7 +74,7 @@ function loadHomePage() {
 			const added = document.querySelector(`.js-added-to-cart-${productId}`);
 			let timeOutId;
 
-			addToCart(productId);
+			cart.addToCart(productId);
 			added.classList.add('added-image');
 
 			clearTimeout(timeOutId);

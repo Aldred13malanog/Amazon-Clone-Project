@@ -1,4 +1,4 @@
-import { cart, removeFromCart, updateCartQuantity, updateQuantity, updateDeliveryOptions } from "../../data/cart.js";
+import { cart } from "../../data/cart.js";
 import {getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import { deliveryOptions, calculateDeliveryDays, getDeliveryOption } from "../../data/deliveryOptions.js";
@@ -7,7 +7,7 @@ import { loadPaymentSummary } from "./paymentSummary.js";
 export function loadOrderSummary() {
 	let orderSummaryHTML = '';	
 
-	cart.forEach((cartItem) => {
+	cart.cartItems.forEach((cartItem) => {
 		const cartProductId = cartItem.productId;
 		const matchingItem = getProduct(cartProductId);
 
@@ -101,7 +101,7 @@ export function loadOrderSummary() {
 		return html;
 	}
 
-	const cartQuantity = updateCartQuantity();
+	const cartQuantity = cart.updateCartQuantity();
 	document.querySelector('.js-return-to-home').innerHTML = `${cartQuantity} items`;
 
 	document.querySelector('.js-order-summary').innerHTML = orderSummaryHTML;
@@ -109,7 +109,7 @@ export function loadOrderSummary() {
 	document.querySelectorAll('.js-delete-quantity').forEach((button) => {
 		button.addEventListener('click', () => {
 			const {productId} = button.dataset;
-			removeFromCart(productId);
+			cart.removeFromCart(productId);
 			loadOrderSummary();
 			loadPaymentSummary();
 		})
@@ -139,7 +139,7 @@ export function loadOrderSummary() {
 			}
 
 			quantityLabel.innerHTML = newQuantity;
-			updateQuantity(productId, newQuantity);
+			cart.updateQuantity(productId, newQuantity);
 			loadOrderSummary();
 			loadPaymentSummary();
 		})
@@ -149,7 +149,7 @@ export function loadOrderSummary() {
 	document.querySelectorAll('.js-delivery-option').forEach((element) => {
 		element.addEventListener('click', () => {
 			const {productId, deliveryId} = element.dataset;
-			updateDeliveryOptions(productId, deliveryId);
+			cart.updateDeliveryOptions(productId, deliveryId);
 			loadOrderSummary();
 			loadPaymentSummary();
 		});
