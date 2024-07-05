@@ -1,6 +1,5 @@
 import { products } from "../data/products.js";
-import { formatCurrency } from "./utils/money.js";
-import { addToCart, cart, updateCartQuantity } from "../data/cart.js";
+import { addToCart, updateCartQuantity } from "../data/cart.js";
 
 function loadHomePage() {
 	let productHTML = '';
@@ -19,14 +18,14 @@ function loadHomePage() {
 
 				<div class="product-rating-container">
 					<img class="product-rating-stars"
-						src="images/ratings/rating-${(product.rating.stars) * 10}.png">
+						src="${product.getStarsUrl()}">
 					<div class="product-rating-count link-primary">
 						${product.rating.count}
 					</div>
 				</div>
 
 				<div class="product-price">
-					$${formatCurrency(product.priceCents)}
+					${product.getPrice()}
 				</div>
 
 				<div class="product-quantity-container">
@@ -43,6 +42,8 @@ function loadHomePage() {
 						<option value="10">10</option>
 					</select>
 				</div>
+
+				${product.extraInfoHTML()}	
 
 				<div class="product-spacer"></div>
 
