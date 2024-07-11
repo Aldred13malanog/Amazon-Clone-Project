@@ -2,15 +2,13 @@ import { orders } from "../data/orders.js";
 import { formatCurrency } from "./utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { getProduct } from "../data/products.js";
-import { cart } from "../data/cart.js";
+import { isWeekend } from "../data/deliveryOptions.js";
 
 function loadOrderPage() {
 	let ordersHTML = '';
 
 	orders.forEach((order) => {
-		const orderTimeString = dayjs().format('MMMM D');
-
-
+		const orderTimeString = dayjs(order.orderTime).format('MMMM D');
 		ordersHTML += `
 			<div class="order-container">
           
@@ -43,23 +41,39 @@ function loadOrderPage() {
 		let html = '';
 
 		order.products.forEach((productDetails) => {
-			const productId = productDetails.productId;
-			const matchingItem = getProduct(productId);
-			const matchingItemCart = cart.getCart(productId);
+			const product = getProduct(productDetails.productId);
+			const deliveryId = productDetails.deliveryId;
+			let deliveryDays;
+			if (deliveryId == 1) {
+				deliveryDays = 7;
+			} else if (deliveryId == 2) {
+				deliveryDays = 3;
+			} else {
+				deliveryDays = 1;
+			}
+			let today = dayjs();
+			while (deliveryDays > 0) {
+				today = today.add(1, 'day');
+				if (!isWeekend(today)) {
+					deliveryDays--;
+				}
+			}
+			const dateString = today.format('MMMM D');
+			
 			html += `
 				<div class="product-image-container">
-					<img src="${matchingItem.image}">
+					<img src="${product.image}">
 				</div>
 
 				<div class="product-details">
 					<div class="product-name">
-						${matchingItem.name}
+						${product.name}
 					</div>
 					<div class="product-delivery-date">
-						Arriving on: August 15
+						Arriving on: ${dateString}
 					</div>
 					<div class="product-quantity">
-						Quantity: ${matchingItemCart.quantity}
+						Quantity: ${productDetails.quantity}
 					</div>
 					<button class="buy-again-button button-primary">
 						<img class="buy-again-icon" src="images/icons/buy-again.png">

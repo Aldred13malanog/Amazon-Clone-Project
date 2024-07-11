@@ -18,7 +18,7 @@ class Cart {
 				quantity: 1,
 				deliveryId: '2'
 			}];
-		};	
+		};
 	}
 
 	addToCart(productId) {
