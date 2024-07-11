@@ -749,12 +749,12 @@ export const products = [
   return new Product(productDetails);
 });
 
-export function getProduct(cartProductId) {
+export function getProduct(productId) {
   let matchingProduct;
 
   products.forEach((product) => {
-    if (cartProductId === product.id) {
-      matchingProduct = product
+    if (productId === product.id) {
+      matchingProduct = product;
     }
   });
   return matchingProduct;
