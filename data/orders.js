@@ -1,4 +1,5 @@
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+import { cart } from './cart.js';
 
 export let orders = JSON.parse(localStorage.getItem('orders'));
 
@@ -40,4 +41,26 @@ export function uniqueid() {
 		return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
 	}
 	return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4());
+}
+
+export function addToCartFromOrders(productId) {
+	let matchingItem;
+
+	cart.cartItems.forEach((cartItem) => {
+		if (productId === cartItem.productId) {
+			matchingItem = cartItem;
+		}
+	});
+
+	if (matchingItem) {
+		matchingItem.quantity += 1;
+	} else {
+		this.cartItems.push({
+			productId,
+			quantity,
+			deliveryId: '1'
+		});
+	}
+
+	cart.saveToLocalStorage();
 }

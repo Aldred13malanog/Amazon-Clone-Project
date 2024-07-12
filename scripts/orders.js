@@ -1,4 +1,4 @@
-import { orders } from "../data/orders.js";
+import { orders, addToCartFromOrders } from "../data/orders.js";
 import { formatCurrency } from "./utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { getProduct } from "../data/products.js";
@@ -75,14 +75,15 @@ function loadOrderPage() {
 					<div class="product-quantity">
 						Quantity: ${productDetails.quantity}
 					</div>
-					<button class="buy-again-button button-primary">
+					<button class="buy-again-button button-primary js-buy-again"
+						data-product-id="${product.id}">
 						<img class="buy-again-icon" src="images/icons/buy-again.png">
 						<span class="buy-again-message">Buy it again</span>
 					</button>
 				</div>
 
 				<div class="product-actions">
-					<a href="tracking.html">
+					<a href="tracking.html?orderId=${order.id}&productId=${product.id}">
 						<button class="track-package-button button-secondary">
 							Track package
 						</button>
@@ -95,5 +96,20 @@ function loadOrderPage() {
 	}
 
 	document.querySelector('.js-orders-grid').innerHTML = ordersHTML;
+
+	document.querySelectorAll('.js-buy-again').forEach((button) => {
+		button.addEventListener('click', () => {
+			addToCartFromOrders(button.dataset.productId);
+
+			button.innerHTML = 'Added';
+
+			setTimeout(() => {
+				button.innerHTML = `
+					<img class="buy-again-icon" src="images/icons/buy-again.png">
+					<span class="buy-again-message">Buy it again</span>
+				`;
+			}, 1000)
+		})
+	})
 }
 loadOrderPage();
