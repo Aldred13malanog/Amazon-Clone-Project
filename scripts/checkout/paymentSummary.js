@@ -78,7 +78,7 @@ export function loadPaymentSummary() {
 
 		addOrder({
 			id: uniqueid(),
-			orderTime: dayjs().format(),
+			orderTime: dayjs(),
 			totalCostCents: totalCents,
 			products: cart.cartItems
 		});
