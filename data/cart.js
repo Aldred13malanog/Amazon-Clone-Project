@@ -108,6 +108,12 @@ class Cart {
 		return matchingItem;
 	}
 
+	displayQuantity() {
+		const cartQuantity = this.updateCartQuantity();
+		document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+		return cartQuantity;
+	}
+
 }
 
 export let cart = new Cart();

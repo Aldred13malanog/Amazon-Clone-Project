@@ -2,6 +2,7 @@ import { getProduct } from "../data/products.js";
 import { getOrder } from "../data/orders.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { isWeekend } from "../data/deliveryOptions.js";
+import { cart } from "../data/cart.js";
 
 function loadTrackingPage() {
 	const url = new URL(window.location.href);
@@ -84,6 +85,8 @@ function loadTrackingPage() {
 			<div class="progress-bar" style="width: ${percentProgress}%"></div>
 		</div>
 	`;
+
+	cart.displayQuantity();
 
 	document.querySelector('.js-order-tracking').innerHTML = html;
 }

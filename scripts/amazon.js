@@ -60,11 +60,7 @@ function loadHomePage() {
 		`;
 	});
 
-	displayQuantity();
-	function displayQuantity() {
-		const cartQuantity = cart.updateCartQuantity();
-		document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
-	}	
+	cart.displayQuantity();	
 
 	document.querySelector('.js-products-grid').innerHTML = productHTML;
 
@@ -83,7 +79,7 @@ function loadHomePage() {
 				added.classList.remove('added-image');
 			}, 2000);
 
-			displayQuantity();
+			cart.displayQuantity();
 		})
 	});
 }

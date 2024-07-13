@@ -3,6 +3,7 @@ import { formatCurrency } from "./utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { getProduct } from "../data/products.js";
 import { isWeekend } from "../data/deliveryOptions.js";
+import { cart } from "../data/cart.js";
 
 function loadOrderPage() {
 	let ordersHTML = '';
@@ -95,6 +96,8 @@ function loadOrderPage() {
 		return html;
 	}
 
+	cart.displayQuantity();
+
 	document.querySelector('.js-orders-grid').innerHTML = ordersHTML;
 
 	document.querySelectorAll('.js-buy-again').forEach((button) => {
@@ -108,8 +111,9 @@ function loadOrderPage() {
 					<img class="buy-again-icon" src="images/icons/buy-again.png">
 					<span class="buy-again-message">Buy it again</span>
 				`;
-			}, 1000)
-		})
-	})
+			}, 1000);
+			cart.displayQuantity();
+		});
+	});
 }
 loadOrderPage();
