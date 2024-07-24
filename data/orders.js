@@ -1,5 +1,6 @@
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { cart } from './cart.js';
+import { isWeekend } from './deliveryOptions.js';
 
 export let orders = JSON.parse(localStorage.getItem('orders'));
 
@@ -14,18 +15,19 @@ function loadFromStorage() {
 				{
 					productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
 					quantity: 2,
-					estimatedDeliveryTime: dayjs().format()
+					estimatedDeliveryTime: dayjs(),
+					deliveryId: '3'
 				},
 				{
 					productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
 					quantity: 1,
-					estimatedDeliveryTime: dayjs().format()
+					estimatedDeliveryTime: dayjs(),
+					deliveryId: '3'
 				}
 			]
 		}];
 	}
 }
-
 
 export function addOrder(order) {
 	orders.unshift(order);
@@ -75,4 +77,45 @@ export function addToCartFromOrders(productId) {
 	}
 
 	cart.saveToLocalStorage();
+}
+
+export function calculateEstimatedTime(deliveryId, deliveryTime) {
+	let deliveryDays;
+	if (deliveryId == 1) {
+		deliveryDays = 7;
+	} else if (deliveryId == 2) {
+		deliveryDays = 3;
+	} else {
+		deliveryDays = 1;
+	}
+	let today = dayjs(deliveryTime);
+
+	while (deliveryDays > 0) {
+		today = today.add(1, 'day');
+		if (!isWeekend(today)) {
+			deliveryDays--;
+		}
+	}
+	const dateString = today.format('MMMM D');
+	return dateString;
+}
+
+export function calculateEstimatedTimeForTrackingPage(deliveryId, deliveryTime) {
+	let deliveryDays;
+	if (deliveryId == 1) {
+		deliveryDays = 7;
+	} else if (deliveryId == 2) {
+		deliveryDays = 3;
+	} else {
+		deliveryDays = 1;
+	}
+	let today = dayjs(deliveryTime);
+
+	while (deliveryDays > 0) {
+		today = today.add(1, 'day');
+		if (!isWeekend(today)) {
+			deliveryDays--;
+		}
+	}
+	return today;
 }

@@ -1,8 +1,7 @@
-import { orders, addToCartFromOrders } from "../data/orders.js";
+import { orders, addToCartFromOrders, calculateEstimatedTime } from "../data/orders.js";
 import { formatCurrency } from "./utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { getProduct } from "../data/products.js";
-import { isWeekend } from "../data/deliveryOptions.js";
 import { cart } from "../data/cart.js";
 
 function loadOrderPage() {
@@ -44,22 +43,8 @@ function loadOrderPage() {
 		order.products.forEach((productDetails) => {
 			const product = getProduct(productDetails.productId);
 			const deliveryId = productDetails.deliveryId;
-			let deliveryDays;
-			if (deliveryId == 1) {
-				deliveryDays = 7;
-			} else if (deliveryId == 2) {
-				deliveryDays = 3;
-			} else {
-				deliveryDays = 1;
-			}
-			let today = dayjs();
-			while (deliveryDays > 0) {
-				today = today.add(1, 'day');
-				if (!isWeekend(today)) {
-					deliveryDays--;
-				}
-			}
-			const dateString = today.format('MMMM D');
+			const deliveryTime = productDetails.estimatedDeliveryTime;
+			const dateString = calculateEstimatedTime(deliveryId, deliveryTime);
 			
 			html += `
 				<div class="product-image-container">

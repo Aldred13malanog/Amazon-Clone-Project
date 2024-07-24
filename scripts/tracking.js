@@ -1,7 +1,6 @@
 import { getProduct } from "../data/products.js";
-import { getOrder } from "../data/orders.js";
+import { calculateEstimatedTime, calculateEstimatedTimeForTrackingPage, getOrder } from "../data/orders.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import { isWeekend } from "../data/deliveryOptions.js";
 import { cart } from "../data/cart.js";
 
 function loadTrackingPage() {
@@ -20,30 +19,16 @@ function loadTrackingPage() {
 	});
 
 	const deliveryId = productDetails.deliveryId;
-	let deliveryDays;
-	if (deliveryId == 1) {
-		deliveryDays = 7;
-	} else if (deliveryId == 2) {
-		deliveryDays = 3;
-	} else {
-		deliveryDays = 1;
-	}
-	let today = dayjs();
-	while (deliveryDays > 0) {
-		today = today.add(1, 'day');
-		if (!isWeekend(today)) {
-			deliveryDays--;
-		}
-	}
-	const dateString = today.format('dddd, MMMM D');
+	const estimatedTime = productDetails.estimatedDeliveryTime;
+	const dateString = calculateEstimatedTime(deliveryId, estimatedTime);
 
 	let todays = dayjs();
 	let orderTime = dayjs(order.orderTime);
-	let deliveryTime = today;
+	let deliveryTime = calculateEstimatedTimeForTrackingPage(deliveryId, estimatedTime);
+
 	const percentProgress = ((todays - orderTime) / (deliveryTime - orderTime)) * 100;
-
 	const deliveredMessage = todays < deliveryTime ? 'Arriving on' : 'Delivered on';
-
+	
 	const html = `
 		<a class="back-to-orders-link link-primary" href="orders.html">
 			View all orders

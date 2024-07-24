@@ -3,7 +3,7 @@ import { cart } from "../../data/cart.js";
 import { getProduct } from "../../data/products.js";
 import { getDeliveryOption } from "../../data/deliveryOptions.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import { addOrder, orders, uniqueid } from "../../data/orders.js";
+import { addOrder, uniqueid } from "../../data/orders.js";
 
 export function loadPaymentSummary() {
 	let cartQuantity = 0;
@@ -75,14 +75,27 @@ export function loadPaymentSummary() {
 	document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML;
 
 	document.querySelector('.js-place-order').addEventListener('click', () => {
-
-		addOrder({
+		let order = {
 			id: uniqueid(),
 			orderTime: dayjs(),
 			totalCostCents: totalCents,
-			products: cart.cartItems
-		});
+			products: []
+		};
 
-		window.location.href = 'orders.html';
+		cart.cartItems.forEach((details) => {
+			let productId = details.productId;
+			let quantity = details.quantity;
+			let deliveryId = details.deliveryId;
+			order.products.push({
+				productId,
+				quantity,
+				estimatedDeliveryTime: dayjs(),
+				deliveryId
+			});
+		});
+		addOrder(order);		
+		order = {};
+
+		window.location.href = 'orders.html';		
 	});
 }
