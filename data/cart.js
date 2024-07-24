@@ -114,6 +114,10 @@ class Cart {
 		return cartQuantity;
 	}
 
+	resetCart() {
+		this.cartItems = [];
+		this.saveToLocalStorage();
+	}
 }
 
 export let cart = new Cart();

@@ -95,6 +95,7 @@ export function loadPaymentSummary() {
 		});
 		addOrder(order);		
 		order = {};
+		cart.resetCart();
 
 		window.location.href = 'orders.html';		
 	});
