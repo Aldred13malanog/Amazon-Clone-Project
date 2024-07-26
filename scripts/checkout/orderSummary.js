@@ -42,7 +42,8 @@ export function loadOrderSummary() {
 								data-product-id="${matchingItem.id}">
 								Update
 							</span>
-							<input class="quantity-input js-quantity-input-${matchingItem.id}">
+							<input class="quantity-input js-quantity-input-${matchingItem.id}" 
+								data-product-id="${matchingItem.id}">
 							<span class="save-quantity-link link-primary js-save-quantity" 
 								data-product-id="${matchingItem.id}">
 								Save
@@ -144,6 +145,30 @@ export function loadOrderSummary() {
 			loadPaymentSummary();
 		})
 	});
+
+	document.querySelectorAll('.quantity-input').forEach((input) => {
+		input.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				const {productId} = input.dataset;
+				const container = document.querySelector(`.js-cart-item-container-${productId}`);
+				container.classList.remove('is-editing-quantity');
+
+				const inputElem = document.querySelector(`.js-quantity-input-${productId}`);
+				const newQuantity = Number(inputElem.value);
+				const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);
+
+				if (newQuantity < 0 || newQuantity >= 1000) {
+					alert('Quantity must be at least 0 and less than 1000');
+					return;
+				}
+
+				quantityLabel.innerHTML = newQuantity;
+				cart.updateQuantity(productId, newQuantity);
+				loadOrderSummary();
+				loadPaymentSummary();
+			}
+		})
+	})
 
 	// purpose: when clicking its container we can still select delivery option
 	document.querySelectorAll('.js-delivery-option').forEach((element) => {

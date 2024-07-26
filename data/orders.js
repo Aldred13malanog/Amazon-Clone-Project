@@ -69,13 +69,12 @@ export function addToCartFromOrders(productId) {
 	if (matchingItem) {
 		matchingItem.quantity += 1;
 	} else {
-		this.cartItems.push({
+		cart.cartItems.push({
 			productId,
-			quantity,
+			quantity: 1,
 			deliveryId: '1'
 		});
 	}
-
 	cart.saveToLocalStorage();
 }
 
